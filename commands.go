@@ -17,6 +17,12 @@ var Commands = []cli.Command{
 		Action: command.CmdCreate,
 		Flags:  []cli.Flag{},
 	},
+	{
+		Name:   "all",
+		Usage:  "",
+		Action: command.CmdAll,
+		Flags:  []cli.Flag{},
+	},
 }
 
 func CommandNotFound(c *cli.Context, command string) {

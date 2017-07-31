@@ -1,4 +1,4 @@
 #! /bin/sh
 
 go build
-./lab create
+./lab all
