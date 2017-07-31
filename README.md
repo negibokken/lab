@@ -6,6 +6,24 @@ Create GitLab Repository easily. And make sharing your code faster!
 
 ## Usage
 
+* Create a repository that name is current directory
+
+  ```
+  $ lab create
+  ```
+
+* Commit you all codes in current directory and push them to created Directory
+
+  ```
+  $ lab push
+  ```
+
+* Create repository and push them instantly
+
+  ```
+  $ lab all
+  ```
+
 ## Install
 
 To install, use `go get`:
