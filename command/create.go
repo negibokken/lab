@@ -86,6 +86,7 @@ func createRepository() error {
 		return err
 	}
 	req.Header.Set("Content-Type", "application/x-www-urlencoded")
+	req.Header.Add("PRIVATE-TOKEN", PrivateToken)
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
