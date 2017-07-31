@@ -2,6 +2,8 @@ package command
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"sort"
 	"strings"
@@ -68,7 +70,34 @@ func init() {
 }
 
 func CmdCreate(c *cli.Context) {
-	fmt.Println(UserID)
-	fmt.Println(PrivateToken)
-	fmt.Println(GitLabApiUrl)
+	err := createRepository()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v", err)
+		os.Exit(1)
+	}
+}
+
+func createRepository() error {
+	req, err := http.NewRequest(
+		"POST", GitLabApiUrl, nil,
+	)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s", err)
+		return err
+	}
+	req.Header.Set("Content-Type", "application/x-www-urlencoded")
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s", err)
+		return err
+	}
+	buf, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s", err)
+		return err
+	}
+	fmt.Println(string(buf))
+	defer resp.Body.Close()
+	return nil
 }
