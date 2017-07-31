@@ -3,8 +3,10 @@ package command
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -22,16 +24,16 @@ func checkEnv() {
 		"GL_PRIVATE":  true,
 	}
 	if GitLabApiUrl == "" {
-		flags["GL_ENDPOINT"] = false
-		fmt.Fprintf(os.Stderr, "Environement variable is not set")
+		GitLabApiUrl = "https://api.gitlab.com/v3"
+		fmt.Fprintf(os.Stderr, "Environement variable GL_ENDPOINT is not set. Default endpoint https://api.gitlab.com/v3 is used")
 	}
 	if UserID == "" {
 		flags["GL_USER"] = false
-		fmt.Fprintf(os.Stderr, "Environement variable is not set")
+		fmt.Fprintf(os.Stderr, "Environement variable GL_USER is not set")
 	}
 	if PrivateToken == "" {
 		flags["GL_PRIVATE"] = false
-		fmt.Fprintf(os.Stderr, "Environement variable is not set")
+		fmt.Fprintf(os.Stderr, "Environement variable GL_PRIVATE is not set")
 	}
 	keys := []string{}
 	for k := range flags {
@@ -77,9 +79,19 @@ func CmdCreate(c *cli.Context) {
 	}
 }
 
+func currentDirectory() string {
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return filepath.Base(dir)
+}
+
 func createRepository() error {
+	projectName := currentDirectory()
+	resource := "/projects?name=" + projectName
 	req, err := http.NewRequest(
-		"POST", GitLabApiUrl, nil,
+		"POST", GitLabApiUrl+resource, nil,
 	)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s", err)
