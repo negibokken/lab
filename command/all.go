@@ -28,6 +28,5 @@ func CmdAll(c *cli.Context) {
 			fmt.Fprintf(os.Stderr, "%v", err)
 		}
 		fmt.Println(out)
-		fmt.Fprintf(os.Stderr, out)
 	}
 }
