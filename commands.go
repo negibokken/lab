@@ -18,6 +18,12 @@ var Commands = []cli.Command{
 		Flags:  []cli.Flag{},
 	},
 	{
+		Name:   "push",
+		Usage:  "",
+		Action: command.CmdPush,
+		Flags:  []cli.Flag{},
+	},
+	{
 		Name:   "all",
 		Usage:  "",
 		Action: command.CmdAll,
